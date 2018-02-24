@@ -1,0 +1,53 @@
+@CHARSET "UTF-8";
+
+.container {
+  display: flex;
+  justify-content: center;
+  margin-top: 0px;
+  margin-bottom: 0px;
+}
+
+.box {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  margin-left: 30px;
+  margin-right: 30px;
+}
+
+#title {
+  color: #666;
+  width: 50%;
+  height: 30px;
+  font-size: 100%;
+}
+
+#notetag a {
+  display: inline-block;
+  border-width: 1px 1px 0px 1px;
+  border-style: solid;
+  bolder-color: black;
+  padding: 0.75em 1em;
+  margin-bottom: 0px;
+  text-decoration: none;
+  color: black;
+  background-color: white;
+  font-weight: bold;
+  position: relative;
+}
+
+#notetag a:hover {
+  text-decoration: underline;
+}
+
+#notebody {
+  margin-top: -1px;
+}
+
+.notepage {
+  border: 1px solid black;
+  margin-top: -1px;
+  padding: 1em;
+  background-color: white;
+  position: relative;
+  z-index: 0;
+}
