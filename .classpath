@@ -21,5 +21,6 @@
 	<classpathentry kind="lib" path="C:/pleiades/workspace/KINOKOYAMA/WebContent/WEB-INF/lib/gson-2.8.2.jar"/>
 	<classpathentry kind="lib" path="C:/pleiades/workspace/KINOKOYAMA/WebContent/WEB-INF/lib/gson-2.8.2-javadoc.jar"/>
 	<classpathentry kind="lib" path="C:/pleiades/workspace/KINOKOYAMA/WebContent/WEB-INF/lib/gson-2.8.2-sources.jar"/>
+	<classpathentry kind="lib" path="C:/pleiades/eclipse/lombok.jar"/>
 	<classpathentry kind="output" path="build/WEB-INF/classes"/>
 </classpath>

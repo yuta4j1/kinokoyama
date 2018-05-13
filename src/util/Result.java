@@ -2,45 +2,44 @@ package util;
 
 import java.util.List;
 
+import lombok.Data;
+
+/**
+ * 処理結果を格納するBean定義クラス
+ *
+ * @author ozaki
+ *
+ */
+@Data
 public class Result {
 
-    // 処理成功/失敗フラグ
+    /* 正常終了フラグ */
     private boolean success;
 
-    // 成功メッセージ
-    private List<String> successMsg;
+    /* 通知メッセージ */
+    private List<String> msg;
 
-    // エラーメッセージ
+    /* エラーメッセージ */
     private List<String> errorMsg;
 
-    // コンストラクタ
-    public Result(List<String> sMsg, List<String> eMsg) {
-        this.successMsg = sMsg;
-        this.errorMsg = eMsg;
+
+    /**
+     * 引数なしコンストラクタ
+     */
+    public Result(){
     }
 
-    public boolean isSuccess() {
-        return success;
+    /**
+     * コンストラクタ
+     *
+     * @param sMsg 処理成功時メッセージ
+     * @param eMsg
+     */
+    public Result(List<String> msg, List<String> eMsg) {
+        this.setMsg(msg);
+        this.setErrorMsg(eMsg);
     }
 
-    public void setSuccess(boolean success) {
-        this.success = success;
-    }
 
-    public List<String> getSuccessMsg() {
-        return successMsg;
-    }
-
-    public void setSuccessMsg(List<String> successMsg) {
-        this.successMsg = successMsg;
-    }
-
-    public List<String> getErrorMsg() {
-        return errorMsg;
-    }
-
-    public void setErrorMsg(List<String> errorMsg) {
-        this.errorMsg = errorMsg;
-    }
 
 }

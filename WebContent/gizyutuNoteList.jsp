@@ -3,7 +3,7 @@
 <%@ page session="true"%>
 <%@ page import="model.UserInf"%>
 <%@ page import="java.time.LocalDate"%>
-<%@ page import="java.time.format.DateTimeFormatter" %>
+<%@ page import="java.time.format.DateTimeFormatter"%>
 <%
   LocalDate now = LocalDate.now();
   DateTimeFormatter fmt = DateTimeFormatter.ofPattern("yyyy/MM/dd");
@@ -39,16 +39,43 @@
       document.location.href = "sinkiNote.jsp"
     }
 
+    function postSubmit(destination) {
+      if (destination === 'AddStudyNoteAction') {
+        var addStudyNoteParam = [ 'addNoteTitle', 'addNoteAuthor',
+            'categoryTag', 'studyNote1', 'studyNote2',
+            'studyNote3', 'studyNote4', 'studyNote5' ];
+        for ( let index in addStudyNoteParam) {
+          appendFormChild(addStudyNoteParam[index]);
+        }
+      }
+      var form = $('form[name="setForm"]');
+      // console.log("form", form);
+      form.method = "post";
+      form.action = "./" + destination;
+      form.submit();
+    }
+
+    function appendFormChild(id) {
+      let element = document.getElementById(id);
+      if (!element) {
+        return;
+      }
+      let param = element.value;
+      $('form[name="setForm"]')
+          .append(
+              '<input type="hidden" name="'+ id +'" value="'+ param +'"></input>');
+    }
+
     // ノート追加/削除ボタンの状態変化
-    function toggleNoteButtonState(num){
-      if(num >= 5){
+    function toggleNoteButtonState(num) {
+      if (num >= 5) {
         $('#addNoteButton').prop('disabled', true);
-      }else {
+      } else {
         $('#addNoteButton').prop('disabled', false);
       }
-      if(num <= 1){
+      if (num <= 1) {
         $('#minusNoteButton').prop('disabled', true);
-      }else {
+      } else {
         $('#minusNoteButton').prop('disabled', false);
       }
     }
@@ -56,28 +83,37 @@
     $(function() {
       $('.datepicker').datepicker();
 
-      $('#addNoteButton').on('click', function(){
-        $('<textarea class="form-control form-control-sm" id="studyNote" rows="3" style="margin-top: 20px"></textarea>').insertAfter('#studyNote1');
-        var textAreaNum = $('textarea').length;
-        toggleNoteButtonState(textAreaNum);
-        for(var i = 0; i < textAreaNum; i++){
-          var _id = 'studyNote' + (i + 1);
-          console.log("id", _id);
-          $('textarea').eq(i).attr('id', _id);
-        }
-      });
+      $('#addNoteButton')
+          .on(
+              'click',
+              function() {
+                $(
+                    '<textarea class="form-control form-control-sm" id="studyNote" rows="3" style="margin-top: 20px"></textarea>')
+                    .insertAfter('#studyNote1');
+                var textAreaNum = $('textarea').length;
+                toggleNoteButtonState(textAreaNum);
+                for (var i = 0; i < textAreaNum; i++) {
+                  var _id = 'studyNote' + (i + 1);
+                  console.log("id", _id);
+                  $('textarea').eq(i).attr('id', _id);
+                }
+              });
 
-      $('#minusNoteButton').on('click', function(){
+      $('#minusNoteButton').on('click', function() {
         var textAreaNum = $('textarea').length;
         // toggleNoteButtonState(textAreaNum);
         var targetId = '#studyNote' + textAreaNum;
         $(targetId).remove();
         toggleNoteButtonState($('textarea').length);
       });
+
+      $('#setForm').submit(function() {
+        alert("submitted!");
+      });
     });
   </script>
   <%
-    UserInf model = (UserInf) session.getAttribute("userInf");
+    UserInf userInf = (UserInf) session.getAttribute("userInf");
   %>
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark"> <a
     class="navbar-brand" href="#">きのこ山（仮）</a>
@@ -95,10 +131,11 @@
     </ul>
     <div>
       ようこそ、<i class="fas fa-user"></i>
-      <%=model.getUserName()%>さん！！
+      <%=userInf.getUserName()%>さん！！
     </div>
   </div>
   </nav>
+  <!-- <form name="setForm"></form> -->
   <div class="container">
     <div class="row" style="margin-top: 50px">
       <div class="col-md-10">
@@ -107,86 +144,93 @@
             <div class="card-title">検索条件</div>
           </div>
           <div class="card-body">
-            <form method="post" action="SearchNoteAction">
-              <div class="cantainer">
-                <div class="form-group row">
-                  <label class="col-form-label col-md-2" for="author">作成者</label>
-                  <div class="col-md-6">
-                    <div class="input-group" aria-label="Text input with dropdown button">
-                      <input type="text" class="form-control">
-                      <div class="input-group-append">
-                        <button id="btnGroupAuthor" type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        </button>
-                        <div class="dropdown show">
-                          <div class="dropdown-menu dropdown-menu-right" aria-labelledby="btnGroupAuthor">
-                            <a class="active dropdown-item" href="#">Action</a>
-                            <a class="dropdown-item" href="#">Another action</a>
-                            <a class="dropdown-item" href="#">Something else here</a>
-                          </div>
+            <!-- <form method="post" action="SearchNoteAction"> -->
+            <div class="cantainer">
+              <div class="form-group row">
+                <label class="col-form-label col-md-2" for="author">作成者</label>
+                <div class="col-md-6">
+                  <div class="input-group"
+                    aria-label="Text input with dropdown button">
+                    <input type="text" class="form-control">
+                    <div class="input-group-append">
+                      <button id="btnGroupAuthor" type="button"
+                        class="btn btn-secondary dropdown-toggle"
+                        data-toggle="dropdown" aria-haspopup="true"
+                        aria-expanded="false"></button>
+                      <div class="dropdown show">
+                        <div class="dropdown-menu dropdown-menu-right"
+                          aria-labelledby="btnGroupAuthor">
+                          <a class="active dropdown-item" href="#">Action</a> <a
+                            class="dropdown-item" href="#">Another action</a> <a
+                            class="dropdown-item" href="#">Something else here</a>
                         </div>
                       </div>
                     </div>
                   </div>
                 </div>
-                <div class="form-group row">
-                  <div class="col-md-2">
-                    <label for="title" class="col-form-label">タイトル</label>
-                  </div>
-                  <div class="col-md-6">
-                    <input type="text" id="title" class="form-control" />
-                  </div>
+              </div>
+              <div class="form-group row">
+                <div class="col-md-2">
+                  <label for="title" class="col-form-label">タイトル</label>
                 </div>
-                <div class="form-group row">
-                  <label class="col-sm-2 col-form-label" for="taglist">タグ</label>
-                  <div class="col-sm-6" id="taglist">
-                    <div class="dropdown">
-                      <!-- 切替ボタンの設定 -->
-                      <button type="button"
-                        class="btn btn-secondary dropdown-toggle"
-                        id="dropdownMenuButton" data-toggle="dropdown"
-                        aria-haspopup="true" aria-expanded="false">タグ</button>
-                      <!-- ドロップメニューの設定 -->
-                      <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                        <a class="dropdown-item" href="#">メニュー1</a> <a
-                          class="dropdown-item" href="#">メニュー2</a> <a
-                          class="dropdown-item" href="#">メニュー3</a>
-                      </div>
-                      <!-- /.dropdown-menu -->
+                <div class="col-md-6">
+                  <input type="text" id="title" class="form-control" />
+                </div>
+              </div>
+              <div class="form-group row">
+                <label class="col-sm-2 col-form-label" for="taglist">タグ</label>
+                <div class="col-sm-6" id="taglist">
+                  <div class="dropdown">
+                    <!-- 切替ボタンの設定 -->
+                    <button type="button"
+                      class="btn btn-secondary dropdown-toggle"
+                      id="dropdownMenuButton" data-toggle="dropdown"
+                      aria-haspopup="true" aria-expanded="false">タグ</button>
+                    <!-- ドロップメニューの設定 -->
+                    <div class="dropdown-menu"
+                      aria-labelledby="dropdownMenuButton">
+                      <a class="dropdown-item" href="#">メニュー1</a> <a
+                        class="dropdown-item" href="#">メニュー2</a> <a
+                        class="dropdown-item" href="#">メニュー3</a>
                     </div>
-                    <!-- /.dropdown -->
+                    <!-- /.dropdown-menu -->
                   </div>
+                  <!-- /.dropdown -->
                 </div>
-                <div class="form-group row">
-                  <label class="col-md-2 label-control" for="upddate">更新日付</label>
-                  <div class="col-md-6" id="upddate">
-                    <div class="row">
-                      <div class="col-md-6">
-                        <input type="text" class="datepicker form-control" />
-                      </div>
-                      <!-- <div class="col-md-2">
+              </div>
+              <div class="form-group row">
+                <label class="col-md-2 label-control" for="upddate">更新日付</label>
+                <div class="col-md-6" id="upddate">
+                  <div class="row">
+                    <div class="col-md-6">
+                      <input type="text" class="datepicker form-control" />
+                    </div>
+                    <!-- <div class="col-md-2">
                         <p>～</p>
                       </div> -->
-                      <div class="col-md-6">
-                        <input type="text" class="datepicker form-control" />
-                      </div>
+                    <div class="col-md-6">
+                      <input type="text" class="datepicker form-control" />
                     </div>
                   </div>
                 </div>
               </div>
-            </form>
+            </div>
+            <!-- </form> -->
           </div>
           <div class="card-footer">
             <div class="row">
               <div class="col-md-2">
-                <input type="button" value="新規ノート" class="btn btn-outline-success"
-                data-toggle="modal" data-target="#addNoteModal">
+                <input type="button" value="新規ノート"
+                  class="btn btn-outline-success" data-toggle="modal"
+                  data-target="#addNoteModal">
               </div>
               <div class="col-md-6"></div>
               <div class="col-md-4">
                 <div class="btn-group" role="group">
                   <input type="submit" name="searchButton" value="検索"
-                    class="btn btn-outline-primary" />
-                  <input type="button" value="条件クリア" class="btn btn-outline-secondary" onclick="sinki()">
+                    class="btn btn-outline-primary" /> <input type="button"
+                    value="条件クリア" class="btn btn-outline-secondary"
+                    onclick="sinki()">
                 </div>
               </div>
             </div>
@@ -195,56 +239,75 @@
       </div>
     </div>
   </div>
-  <div class="modal fade" id="addNoteModal" tabindex="-1" role="dialog" data-backdrop="static" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal fade" id="addNoteModal" tabindex="-1" role="dialog"
+    data-backdrop="static" aria-labelledby="myModalLabel"
+    aria-hidden="true">
     <div class="container">
+
       <div class="modal-dialog" role="document">
         <div class="modal-content" style="width: 740px; margin-left: -70px">
           <div class="modal-header" style="background-color: #3399FF">
-            <h5 class="modal-title" style="color: #FFFFFF	">Study Note</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <h5 class="modal-title" style="color: #FFFFFF">Study Note</h5>
+            <button type="button" class="close" data-dismiss="modal"
+              aria-label="Close">
               <span aria-hidden="true">&times;</span>
             </button>
           </div>
           <div class="modal-body">
-            <div class="float-right"><%= nowDate %></div>
+
+            <div class="float-right"><%=nowDate%></div>
             <div class="frorm-group">
-                <label>タイトル</label>
-                <input type="text" id="title" class="form-control form-control-sm" placeholder="タイトル" style="width: 580px;">
+              <label>タイトル</label> <input type="text" id="addNoteTitle"
+                name="addNoteTitle" class="form-control form-control-sm"
+                placeholder="タイトル" style="width: 580px;">
             </div>
             <div class="row" style="padding-top: 20px">
               <div class="col-md-4">
                 <div class="frorm-group">
-                  <label>作成者</label>
-                  <input type="text" id="author" class="form-control form-control-sm" placeholder="作成者名">
+                  <label>作成者</label> <input type="text" id="addNoteAuthor"
+                    name="addNoteAuthor" class="form-control form-control-sm"
+                    placeholder="作成者名">
                 </div>
               </div>
               <div class="col-md-4">
                 <div class="frorm-group">
-                  <label>タグ</label>
-                  <input type="text" id="tag" class="form-control form-control-sm" placeholder="タグ名">
+                  <label>タグ</label> <input type="text" id="categoryTag"
+                    name="categoryTag" class="form-control form-control-sm"
+                    placeholder="タグ名">
                 </div>
               </div>
             </div>
-            <hr/>
+            <hr />
             <div class="row">
               <div class="col-md-10"></div>
               <div class="col-md-1">
-                <button type="button" class="btn btn-primary btn-sm" id="addNoteButton"><i class="fas fa-plus"></i></button>
+                <button type="button" class="btn btn-primary btn-sm"
+                  id="addNoteButton">
+                  <i class="fas fa-plus"></i>
+                </button>
               </div>
               <div class="col-md-1">
-                <button type="button" class="btn btn-primary btn-sm" id="minusNoteButton" disabled><i class="fas fa-minus"></i></button>
+                <button type="button" class="btn btn-primary btn-sm"
+                  id="minusNoteButton" disabled>
+                  <i class="fas fa-minus"></i>
+                </button>
               </div>
             </div>
             <div class="form-group">
               <label for="studyNote1">ノート</label>
-              <textarea class="form-control form-control-sm" id="studyNote1" rows="3"></textarea>
+              <textarea class="form-control form-control-sm" id="studyNote1"
+                name="studyNote1" rows="3"></textarea>
             </div>
+
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-primary">登録</button>
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">閉じる
-
-            </button>
+            <form name="setForm">
+              <button type="button" class="btn btn-primary"
+                onclick="postSubmit('AddStudyNoteAction')">登録</button>
+            </form>
+            <!-- <input type="submit" class="btn btn-primary" value="登録" /> -->
+            <button type="button" class="btn btn-secondary"
+              data-dismiss="modal">閉じる</button>
           </div>
         </div>
       </div>

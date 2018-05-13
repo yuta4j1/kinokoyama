@@ -73,10 +73,10 @@ public class AddNoteDao extends BaseDao {
             pstmt.setTimestamp(18, Timestamp.valueOf(model.getCreateDate()));
             if(pstmt.executeUpdate() == 1){
                 result.setSuccess(true);
-                result.getSuccessMsg().add("登録処理が完了しました！");
+                result.getMsg().add("登録処理が完了しました！");
             }else{
                 result.setSuccess(false);
-                result.getSuccessMsg().add("正常に登録処理が完了しませんでした。");
+                result.getErrorMsg().add("正常に登録処理が完了しませんでした。");
             }
 
         } catch (SQLException e) {

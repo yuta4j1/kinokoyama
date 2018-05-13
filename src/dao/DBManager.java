@@ -11,7 +11,7 @@ import util.Constants;
 public class DBManager {
 
     /** コネクションオブジェクト */
-    protected Connection conn = null;
+    private Connection conn = null;
 
     /**
      * コネクションを取得する。
