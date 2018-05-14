@@ -1,6 +1,8 @@
 package action;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -9,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import business.AddStudyNoteBusiness;
+import common.Forward;
 import dao.DBManager;
 import model.StudyNoteModel;
 import util.R2P;
@@ -33,8 +36,10 @@ public class AddStudyNoteAction extends HttpServlet {
         AddStudyNoteBusiness business = new AddStudyNoteBusiness(db.getConnection());
         Result result = new Result();
         business.excecute(model, result);
-
-
+        Map<String, Object> param = new HashMap<>();
+        param.put("model", model);
+        param.put("result", result);
+        new Forward(request, response).response(param, "./");
 
     }
 
