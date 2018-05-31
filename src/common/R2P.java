@@ -38,20 +38,6 @@ public class R2P {
 
               }
             }
-//            Arrays.stream(fields).forEach(field -> {
-//            	String data = request.getParameter(field.getName());
-//                if(data != null) {
-//                    try {
-//                        Method setter = clazz.getMethod(createSetterName(data));
-//                        setter.invoke(data);
-//                    } catch (NoSuchMethodException | SecurityException e) {
-//                        throw new RuntimeException(e);
-//                    } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-//                        throw new RuntimeException(e);
-//                    }
-//
-//                }
-//            });
 
             return instance;
 

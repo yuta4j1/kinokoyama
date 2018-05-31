@@ -28,7 +28,6 @@ public class AppFilter implements Filter {
      * @see Filter#destroy()
      */
     public void destroy() {
-        // TODO Auto-generated method stub
     }
 
     /**
